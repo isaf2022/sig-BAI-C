@@ -1,7 +1,12 @@
 #include <stdbool.h>
 #include "types.h"
+#include <stdio.h>
 
 extern Pessoa clientes[MAX];
+
+int  criar_ficheiro            (void);
+void copia_de_seguranca        (void);
+void restaurar_copia_seguranca (void);
 
 bool  cadastrar_cliente   (Pessoa p);
 bool  abertura_de_conta   (Pessoa p, int tipo_de_conta);
@@ -14,14 +19,23 @@ void  listar_clientes     (void);
 
 int pesquisar_cliente_codigo_cliente (int codigo_cliente);
 
-void mostrar_menu  (void);
-void mostrar_saldo (float );
+void mostrar_menu  		 (void);
+void mostrar_saldo 		 (float );
+void mensagem_de_sucesso (void);
+void mensagem_de_erro    (char []);
 
-void ler_str (char [], char *);
-void ler_int (char [], int *);
+void ler_str   (char [], char *);
+void ler_int   (char [], int *);
 void ler_float (char [], float *);
 
 int main () {
+	if (criar_ficheiro() == ERR_EXEC) {
+		mensagem_de_erro("Impossivel continuar o programa. ");
+		return ERR_EXEC;
+	}
+
+	restaurar_copia_seguranca();
+
 	enum {
 		CADASTRAR_CLIENTE = 1,
 		LISTAR_CLIENTES,
@@ -139,6 +153,11 @@ int main () {
 				resultado = atualizar_dados(p, codigo);
 				break;
 			}
+		}
+
+		if (resultado) {
+			copia_de_seguranca();
+			mensagem_de_sucesso();
 		}
 	}
 }
