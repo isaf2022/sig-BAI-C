@@ -1,6 +1,9 @@
 #define MAX 1000
 #define MAXLINE 100
 
+const int ERR_EXEC = 444;
+const int NAO_ENCONTRADO = -1;
+
 struct Pessoa {
 	int codigo;
 	char nome[MAXLINE];

@@ -1,10 +1,7 @@
-#include <stdio.h>
 #include <stdbool.h>
-#include <locale.h>
 #include "types.h"
 
-Pessoa clientes[MAX];
-Conta contas[MAX];
+extern Pessoa clientes[MAX];
 
 bool  cadastrar_cliente   (Pessoa p);
 bool  abertura_de_conta   (Pessoa p, int tipo_de_conta);
@@ -15,41 +12,133 @@ bool  transferir_dinheiro (int numero_da_conta_enviar, int numero_da_conta_receb
 bool  atualizar_dados     (Pessoa p, int codigo_cliente);
 void  listar_clientes     (void);
 
+int pesquisar_cliente_codigo_cliente (int codigo_cliente);
+
+void mostrar_menu  (void);
+void mostrar_saldo (float );
+
+void ler_str (char [], char *);
+void ler_int (char [], int *);
+void ler_float (char [], float *);
+
 int main () {
+	enum {
+		CADASTRAR_CLIENTE = 1,
+		LISTAR_CLIENTES,
+		ABERTURA_DE_CONTA,
+		DEPOSITAR_DINHEIRO,
+		LEVANTAR_DINHEIRO,
+		CONSULTAR_SALDO,
+		TRANSFERIR_DINHEIRO,
+		ATUALIZAR_DADOS,
+		TERMINAR
+	};
+	
 	int opcao;
-	
-	printf("Insira uma opcao: ");
-	scanf("%d", &opcao);
-	
-	while (opcao != 9) {
+
+	while (opcao != TERMINAR) {
+		mostrar_menu();
+		ler_int("Digite uma opcao: ", &opcao);
+
+		bool resultado;
 		switch (opcao) {
-			case 1:
-				printf("Opcao %d selecionada", opcao);
+			case CADASTRAR_CLIENTE:
+			{
+				Pessoa p;
+
+				ler_str("Digite o seu nome completo: ", p.nome);
+				ler_str("Digite o seu documento de identificacao: ", p.identificacao);
+				ler_int("Digite o seu numero de telefone: ", &p.telefone);
+
+				resultado = cadastrar_cliente(p);
+
 				break;
-			case 2:
-				printf("Opcao %d selecionada", opcao);
+			}
+			case LISTAR_CLIENTES:
+				listar_clientes();
+				
 				break;
-			case 3:
-				printf("Opcao %d selecionada", opcao);
+			case ABERTURA_DE_CONTA:
+			{
+				int codigo, tipo_de_conta;
+
+				ler_int("Digite o seu codigo pessoal: ", &codigo);
+
+				int posicao = pesquisar_cliente_codigo_cliente(codigo);
+				if (posicao == NAO_ENCONTRADO) {
+					break;
+				}
+
+				ler_int("Digite 0 para conta pessoal ou 1 para conta empresarial: ", &tipo_de_conta);
+				resultado = abertura_de_conta (clientes[posicao], tipo_de_conta);
+
 				break;
-			case 4:
-				printf("Opcao %d selecionada", opcao);
+			}
+			case DEPOSITAR_DINHEIRO: 
+			{
+				int numero_conta;
+				float valor;
+
+				ler_int("Digite o seu numero da conta: ", &numero_conta);
+				ler_float("Digite o valor a depositar: ", &valor);
+
+				resultado = depositar_dinheiro(numero_conta, valor);
+				
 				break;
-			case 5:
-				printf("Opcao %d selecionada", opcao);
+			}
+			case LEVANTAR_DINHEIRO:
+			{
+				int numero_conta;
+				float valor;
+
+				ler_int("Digite o seu numero da conta: ", &numero_conta);
+				ler_float("Digite o valor a levantar: ", &valor);
+
+				resultado = levantar_dinheiro(numero_conta, valor);
+				
 				break;
-			case 6:
-				printf("Opcao %d selecionada", opcao);
+			}
+			case CONSULTAR_SALDO:
+			{
+				int numero_conta;
+
+				ler_int("Digite o seu numero da conta: ", &numero_conta);
+
+				float saldo = consultar_saldo(numero_conta);
+				if (saldo == NAO_ENCONTRADO) {
+					break;
+				}
+
+				mostrar_saldo(saldo);
+
 				break;
-			case 7:
-				printf("Opcao %d selecionada", opcao);
+			}
+			case TRANSFERIR_DINHEIRO:
+			{
+				int numero_conta_enviar, numero_conta_receber;
+				float valor;
+
+				ler_int("Digite o seu numero da conta: ", &numero_conta_enviar);
+				ler_int("Digite o numero da conta a receber: ", &numero_conta_receber);
+				ler_float("Digite o valor a transferir: ", &valor);
+
+				resultado = transferir_dinheiro (numero_conta_enviar, numero_conta_receber, valor);
+
 				break;
-			case 8:
-				printf("Opcao %d selecionada", opcao);
+			}
+			case ATUALIZAR_DADOS:
+			{
+				Pessoa p;
+				int codigo;
+
+				ler_int("Digite o seu codigo pessoal: ", &codigo);
+				ler_str("Digite o seu nome completo: ", p.nome);
+				ler_str("Digite o seu documento de identificacao: ", p.identificacao);
+				ler_int("Digite o seu numero de telefone: ", &p.telefone);
+
+				resultado = atualizar_dados(p, codigo);
 				break;
+			}
 		}
-		
-		printf("\nInsira uma Opcao: ");
-		scanf("%d", &opcao);
 	}
 }

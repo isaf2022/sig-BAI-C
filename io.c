@@ -2,7 +2,7 @@
 #include "types.h"
 
 void mostrar_menu (void) {
-  printf("|========================================|\n");
+  	printf("|========================================|\n");
 	printf("| [1] - Cadastrar clientes               |\n");
 	printf("| [2] - Listar clientes                  |\n");
 	printf("| [3] - Abertura de conta                |\n");
@@ -29,7 +29,7 @@ void mensagem_de_erro (char erro[]) {
 
 void mostrar_saldo (float saldo) {
 	printf("==========================================\n");
-	printf(" SALDO ATUAL DA CONTA: %d\n", saldo);
+	printf(" SALDO ATUAL DA CONTA: %f\n", saldo);
 	printf("==========================================\n");
 }
 
@@ -43,9 +43,27 @@ void mostrar_dados_cliente (Pessoa cliente) {
 }
 
 void mostrar_dados_conta (Conta conta) {
-  printf("        DADOS DA CONTA DO CLIENTE         \n");
+  	printf("        DADOS DA CONTA DO CLIENTE         \n");
 	printf(" NUMERO DA CONTA: %d\n", conta.numero_conta, "\n");
 	printf(" TIPO DE CONTA: %d\n", conta.tipo_conta, "\n");
 	printf(" SALDO: %f\n", conta.saldo, "\n");
 	printf(" ESTADO DA CONTA: %d\n\n", conta.estado, "\n");
+}
+
+void ler_str (char mensagem[], char *ptr) {
+	printf(mensagem);
+	scanf("%[^\n]", ptr);
+	getchar();
+}
+
+void ler_int (char mensagem[], int *ptr) {
+	printf(mensagem);
+	scanf("%d", ptr);
+	getchar();
+}
+
+void ler_float (char mensagem[], float *ptr) {
+	printf(mensagem);
+	scanf("%f", ptr);
+	getchar();
 }

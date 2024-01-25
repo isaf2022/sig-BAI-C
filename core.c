@@ -1,11 +1,12 @@
 #include <stdbool.h>
 #include "types.h"
 
-extern struct Pessoa clientes[MAX];
-extern struct Conta contas[MAX];
+Pessoa clientes[MAX];
+Conta contas[MAX];
 int total_clientes, total_contas;
 
 bool cadastrar_cliente (Pessoa p) {
+	p.codigo = total_clientes + 1;
 	clientes[total_clientes++] = p;
 	return true;
 }
@@ -28,7 +29,7 @@ static int pesquisar_conta_numero_conta (int numero_da_conta);
 
 bool depositar_dinheiro (int numero_da_conta, float valor) {
 	int posicao = pesquisar_conta_numero_conta (numero_da_conta);
-	if (posicao == -1) {
+	if (posicao == NAO_ENCONTRADO) {
 		return false;
 	}
 	contas[posicao].saldo = contas[posicao].saldo + valor;
@@ -38,30 +39,30 @@ bool depositar_dinheiro (int numero_da_conta, float valor) {
 
 static int pesquisar_conta_numero_conta (int numero_da_conta) {
 	for (int i = 0; i < total_contas; i++) {
-		if (contas[i].numero_conta = numero_da_conta) {
+		if (contas[i].numero_conta == numero_da_conta) {
 			return i;
 		}
 	}
-	return -1;
+	return NAO_ENCONTRADO;
 }
 
 bool levantar_dinheiro (int numero_da_conta, float valor) {
-	int posicao = pesquisar_conta_numero_conta (numero_da_conta);
-	if (posicao == -1) {
+	int posicao = pesquisar_conta_numero_conta(numero_da_conta);
+	if (posicao == NAO_ENCONTRADO) {
 		return false;
 	}
-	Conta c = contas[posicao];
 	
-	if (c.saldo < valor) {
+	int saldo = contas[posicao].saldo;
+	if (saldo < valor) {
 		return false;
 	}
-	c.saldo = c.saldo - valor;
+	contas[posicao].saldo -= valor;
 }
 
 float consultar_saldo (int numero_da_conta) {
 	int posicao = pesquisar_conta_numero_conta(numero_da_conta);
-	if (posicao == -1) {
-		return -1;
+	if (posicao == NAO_ENCONTRADO) {
+		return NAO_ENCONTRADO;
 	}
 
 	return contas[posicao].saldo;
@@ -69,12 +70,12 @@ float consultar_saldo (int numero_da_conta) {
 
 bool transferir_dinheiro (int numero_da_conta_enviar, int numero_da_conta_receber, float valor) {
 	int posicao_enviar = pesquisar_conta_numero_conta (numero_da_conta_enviar);
-	if (posicao_enviar == -1) {
+	if (posicao_enviar == NAO_ENCONTRADO) {
 		return false;
 	}
 	
 	int posicao_receber = pesquisar_conta_numero_conta (numero_da_conta_receber);
-	if (posicao_receber == -1) {
+	if (posicao_receber == NAO_ENCONTRADO) {
 		return false;
 	}
 
@@ -88,11 +89,11 @@ bool transferir_dinheiro (int numero_da_conta_enviar, int numero_da_conta_recebe
 	return true;
 }
 
-static int pesquisar_cliente_codigo_cliente (int codigo_cliente);
+int pesquisar_cliente_codigo_cliente (int codigo_cliente);
 
 bool atualizar_dados (Pessoa p, int codigo_cliente) {
 	int posicao = pesquisar_cliente_codigo_cliente (codigo_cliente);
-	if (posicao == -1) {
+	if (posicao == NAO_ENCONTRADO) {
 		return false;
 	}
 	
@@ -101,16 +102,16 @@ bool atualizar_dados (Pessoa p, int codigo_cliente) {
 	return true;
 }
 
-static int pesquisar_cliente_codigo_cliente (int codigo_cliente) {
+int pesquisar_cliente_codigo_cliente (int codigo_cliente) {
 	for (int i = 0; i < total_clientes; i++) {
-		if (clientes[i].codigo = codigo_cliente) {
+		if (clientes[i].codigo == codigo_cliente) {
 			return i;
 		}
 	}
-	return -1;
+	return NAO_ENCONTRADO;
 }
 
-int pesquisar_conta_codigo_cliente (int );
+static int pesquisar_conta_codigo_cliente (int );
 
 void listar_clientes (void) {
 	void mostrar_dados_cliente (Pessoa );
@@ -122,7 +123,7 @@ void listar_clientes (void) {
 		mostrar_dados_cliente(p);
 
 		int posicao = pesquisar_conta_codigo_cliente(p.codigo);
-		if (posicao == -1) {
+		if (posicao == NAO_ENCONTRADO) {
 			continue;
 		}
 
@@ -130,11 +131,11 @@ void listar_clientes (void) {
 	}
 }
 
-int pesquisar_conta_codigo_cliente (int codigo_cliente) {
+static int pesquisar_conta_codigo_cliente (int codigo_cliente) {
 	for (int i = 0; i < total_contas; i++) {
 		if (contas[i].codigo_cliente == codigo_cliente) {
 			return i;
 		}
 	}
-	return -1;
+	return NAO_ENCONTRADO;
 }
