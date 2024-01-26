@@ -2,7 +2,7 @@
 #include "types.h"
 
 void mostrar_menu (void) {
-	printf("|========================================|\n");
+  printf("|========================================|\n");
 	printf("| [1] - Cadastrar clientes               |\n");
 	printf("| [2] - Listar clientes                  |\n");
 	printf("| [3] - Abertura de conta                |\n");
@@ -43,7 +43,7 @@ void mostrar_dados_cliente (Pessoa cliente) {
 }
 
 void mostrar_dados_conta (Conta conta) {
-	printf("        DADOS DA CONTA DO CLIENTE         \n");
+  printf("        DADOS DA CONTA DO CLIENTE         \n");
 	printf(" NUMERO DA CONTA: %d\n", conta.numero_conta, "\n");
 	printf(" TIPO DE CONTA: %d\n", conta.tipo_conta, "\n");
 	printf(" SALDO: %f\n", conta.saldo, "\n");
