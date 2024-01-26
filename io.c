@@ -34,7 +34,7 @@ void mostrar_saldo (float saldo) {
 }
 
 void mostrar_dados_cliente (Pessoa cliente) {
-	printf("==========================================\n");
+  printf("==========================================\n");
 	printf("        DADOS PESSOAIS DO CLIENTE         \n");
 	printf(" CODIGO: %d\n", cliente.codigo);
 	printf(" NOME: %s\n", cliente.nome);
