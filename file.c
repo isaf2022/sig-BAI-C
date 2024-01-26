@@ -48,19 +48,28 @@ void restaurar_copia_seguranca (void) {
 
     while (fscanf(file, "%[^\n]\n", linha) == 1) {
         int tamanho = 0;
-        char *valores[9];
+        char *tokens[9];
         char *token = strtok(linha, "\t");
 
         while (token != NULL) {
-            valores[tamanho++] = token;
+            tokens[tamanho++] = token;
             token = strtok(NULL, "\t");
         }
 
         Pessoa p;
-        p.codigo = atoi(valores[0]);
-        p.telefone = atoi(valores[3]);
+        p.codigo = atoi(tokens[0]);
+        char *nome = tokens[1];
+        char *id = tokens[2];
+        p.telefone = atoi(tokens[3]);
 
-        // fill resting person members
+        int i = 0;
+        while (*nome != '\0') {
+            p.nome[i++] = *nome++;
+        }
+        i = 0;
+        while (*id != '\0') {
+            p.identificacao[i++] = *id++;
+        }
 
         clientes[total_clientes++] = p;
 
@@ -69,11 +78,11 @@ void restaurar_copia_seguranca (void) {
         }
 
         Conta c = {
-            atoi(valores[4]),
-            atoi(valores[5]),
-            atof(valores[6]),
-            atoi(valores[7]),
-            atoi(valores[8])
+            atoi(tokens[4]),
+            atoi(tokens[5]),
+            atof(tokens[6]),
+            atoi(tokens[7]),
+            atoi(tokens[8])
         };
 
         contas[total_contas++] = c;
